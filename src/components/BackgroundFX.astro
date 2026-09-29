@@ -1,18 +1,18 @@
 ---
 interface Props {
-	/** "full" = grid + orbs + particles + scan beam + HUD (homepage). "calm" = grid only (content pages). */
+	/** "full" = grid + orbs + particles + scan beam + HUD (homepage). "calm" = grid + orbs only (content pages, no busy motion). */
 	variant?: "full" | "calm";
 }
 
 const { variant = "full" } = Astro.props;
 ---
 
-<div id="bg-grid" class:list={{ calm: variant === "calm" }}></div>
+<div id="bg-grid"></div>
+<div class="orb orb-a"></div>
+<div class="orb orb-b"></div>
 
 {variant === "full" && (
 	<>
-		<div class="orb orb-a"></div>
-		<div class="orb orb-b"></div>
 		<canvas id="particles"></canvas>
 		<div class="scan-beam"></div>
 		<div class="hud-corner hud-tl"></div>

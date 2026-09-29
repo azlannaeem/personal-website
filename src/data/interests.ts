@@ -1,11 +1,11 @@
-// 2 more coming — user is still thinking of them.
 export const interests = [
-	"🏀 Basketball",
-	"⚽ Football",
+	"Basketball",
+	"Football",
 	"Arsenal FC",
-	"🏎️ F1",
-	"🚴 Cycling",
-	"🥾 Hiking",
-	"📚 Reading",
-	"✈️ Travel",
+	"F1",
+	"Cycling",
+	"Hiking",
+	"Reading",
+	"Film buff",
+	"Travel",
 ];

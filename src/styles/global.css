@@ -215,11 +215,6 @@ body {
 	box-shadow: 0 10px 40px -12px rgb(from var(--color-accent) r g b / 0.25);
 }
 
-/* Calm background variant used on content pages (/projects, /resume) — grid only, no motion. */
-#bg-grid.calm {
-	animation: none;
-}
-
 @media (prefers-reduced-motion: reduce) {
 	#bg-grid,
 	.orb,

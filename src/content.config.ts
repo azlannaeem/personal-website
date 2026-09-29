@@ -7,6 +7,7 @@ const projects = defineCollection({
 		title: z.string(),
 		description: z.string(),
 		category: z.enum(["software", "ml", "systems"]),
+		status: z.enum(["completed", "in-progress"]).default("completed"),
 		stack: z.array(z.string()),
 		repoUrl: z.string().url().optional(),
 		demoUrl: z.string().url().optional(),

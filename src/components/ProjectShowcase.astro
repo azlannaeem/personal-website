@@ -1,6 +1,6 @@
 ---
 interface Props {
-	projects: { slug: string; title: string; description: string; stack: string[] }[];
+	projects: { slug: string; title: string; description: string; stack: string[]; status?: "completed" | "in-progress" }[];
 }
 
 const { projects } = Astro.props;
@@ -12,7 +12,12 @@ const { projects } = Astro.props;
 			href={`/projects/${project.slug}`}
 			class="tilt glow-border glass relative block overflow-hidden rounded-2xl p-6"
 		>
-			<p class="font-display text-xl font-semibold text-neutral-100">{project.title}</p>
+			<div class="flex items-center gap-2">
+				<p class="font-display text-xl font-semibold text-neutral-100">{project.title}</p>
+				{project.status === "in-progress" && (
+					<span class="rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-amber-300">In Progress</span>
+				)}
+			</div>
 			<p class="mt-2 text-sm text-white/60">{project.description}</p>
 			<div class="mt-4 flex flex-wrap gap-2 text-xs">
 				{project.stack.slice(0, 3).map((tech) => (
