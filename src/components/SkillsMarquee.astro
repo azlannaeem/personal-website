@@ -1,0 +1,17 @@
+---
+interface Props {
+	items: string[];
+}
+
+const { items } = Astro.props;
+const colors = ["text-accent", "text-white/80", "text-accent2"];
+const track = [...items, ...items];
+---
+
+<div class="w-full overflow-hidden">
+	<div class="marquee-track">
+		{track.map((item, i) => (
+			<span class={`glass rounded-2xl px-6 py-4 font-display text-xl ${colors[i % colors.length]}`}>{item}</span>
+		))}
+	</div>
+</div>

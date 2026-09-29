@@ -1,0 +1,84 @@
+---
+interface Props {
+	/** "full" = grid + orbs + particles + scan beam + HUD (homepage). "calm" = grid only (content pages). */
+	variant?: "full" | "calm";
+}
+
+const { variant = "full" } = Astro.props;
+---
+
+<div id="bg-grid" class:list={{ calm: variant === "calm" }}></div>
+
+{variant === "full" && (
+	<>
+		<div class="orb orb-a"></div>
+		<div class="orb orb-b"></div>
+		<canvas id="particles"></canvas>
+		<div class="scan-beam"></div>
+		<div class="hud-corner hud-tl"></div>
+		<div class="hud-corner hud-tr"></div>
+		<div class="hud-corner hud-bl"></div>
+		<div class="hud-corner hud-br"></div>
+		<div id="spotlight"></div>
+
+		<script>
+			const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+			const spotlight = document.getElementById("spotlight");
+			if (spotlight && !prefersReducedMotion) {
+				window.addEventListener("mousemove", (e) => {
+					spotlight.style.setProperty("--x", e.clientX + "px");
+					spotlight.style.setProperty("--y", e.clientY + "px");
+				});
+			}
+
+			if (!prefersReducedMotion) {
+				const canvas = document.getElementById("particles") as HTMLCanvasElement | null;
+				if (canvas) {
+					const ctx = canvas.getContext("2d");
+					let particles: { x: number; y: number; r: number; vx: number; vy: number; a: number }[] = [];
+
+					function resize() {
+						canvas!.width = window.innerWidth;
+						canvas!.height = window.innerHeight;
+					}
+					function initParticles() {
+						const count = Math.min(70, Math.floor((window.innerWidth * window.innerHeight) / 18000));
+						particles = Array.from({ length: count }, () => ({
+							x: Math.random() * canvas!.width,
+							y: Math.random() * canvas!.height,
+							r: Math.random() * 1.6 + 0.4,
+							vx: (Math.random() - 0.5) * 0.15,
+							vy: (Math.random() - 0.5) * 0.15,
+							a: Math.random() * 0.5 + 0.15,
+						}));
+					}
+					function tick() {
+						if (!ctx) return;
+						ctx.clearRect(0, 0, canvas!.width, canvas!.height);
+						for (const p of particles) {
+							p.x += p.vx;
+							p.y += p.vy;
+							if (p.x < 0) p.x = canvas!.width;
+							if (p.x > canvas!.width) p.x = 0;
+							if (p.y < 0) p.y = canvas!.height;
+							if (p.y > canvas!.height) p.y = 0;
+							ctx.beginPath();
+							ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+							ctx.fillStyle = `rgba(34,211,238,${p.a})`;
+							ctx.fill();
+						}
+						requestAnimationFrame(tick);
+					}
+					window.addEventListener("resize", () => {
+						resize();
+						initParticles();
+					});
+					resize();
+					initParticles();
+					tick();
+				}
+			}
+		</script>
+	</>
+)}

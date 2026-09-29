@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { profile, skills, experience, education } from "../data/resume";
+---
+
+<BaseLayout title="Resume">
+	<div class="reveal flex items-baseline justify-between">
+		<h1 class="text-2xl font-bold tracking-tight text-neutral-100">Resume</h1>
+		<a
+			href={profile.links.resumePdf}
+			download
+			class="rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-neutral-950 transition hover:brightness-110"
+		>
+			Download PDF
+		</a>
+	</div>
+
+	<section class="reveal mt-10">
+		<h2 class="text-xs font-semibold uppercase tracking-widest text-neutral-500">Skills</h2>
+		<div class="mt-4 space-y-2">
+			{skills.map((group) => (
+				<div class="flex flex-col gap-1 sm:flex-row sm:gap-3">
+					<span class="w-44 shrink-0 text-sm font-medium text-neutral-500">{group.label}</span>
+					<span class="text-sm text-neutral-300">{group.items.join(", ")}</span>
+				</div>
+			))}
+		</div>
+	</section>
+
+	<section class="reveal mt-10">
+		<h2 class="text-xs font-semibold uppercase tracking-widest text-neutral-500">Experience</h2>
+		<div class="mt-4 space-y-6">
+			{experience.map((job) => (
+				<div>
+					<div class="flex flex-wrap items-baseline justify-between gap-x-4">
+						<p class="font-medium text-neutral-100">{job.role} · {job.organization}</p>
+						<p class="text-sm text-neutral-500">{job.start} – {job.end}</p>
+					</div>
+					<p class="text-sm text-neutral-500">{job.location}</p>
+					<ul class="mt-1 list-disc pl-5 text-sm text-neutral-300">
+						{job.bullets.map((bullet) => <li>{bullet}</li>)}
+					</ul>
+				</div>
+			))}
+		</div>
+	</section>
+
+	<section class="reveal mt-10">
+		<h2 class="text-xs font-semibold uppercase tracking-widest text-neutral-500">Education</h2>
+		<div class="mt-4 space-y-4">
+			{education.map((school) => (
+				<div>
+					<div class="flex flex-wrap items-baseline justify-between gap-x-4">
+						<p class="font-medium text-neutral-100">{school.degree}</p>
+						<p class="text-sm text-neutral-500">{school.start} – {school.end}</p>
+					</div>
+					<p class="text-sm text-neutral-500">{school.school}, {school.location}</p>
+				</div>
+			))}
+		</div>
+	</section>
+</BaseLayout>

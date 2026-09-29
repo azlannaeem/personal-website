@@ -1,0 +1,16 @@
+---
+import { profile } from "../data/resume";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-white/10">
+	<div class="mx-auto flex max-w-3xl flex-col gap-2 px-6 py-8 text-sm text-neutral-400 sm:flex-row sm:items-center sm:justify-between">
+		<p>© {year} {profile.name}</p>
+		<div class="flex gap-4">
+			<a href={`mailto:${profile.email}`} class="link-underline hover:text-neutral-100">Email</a>
+			<a href={profile.links.github} class="link-underline hover:text-neutral-100">GitHub</a>
+			<a href={profile.links.linkedin} class="link-underline hover:text-neutral-100">LinkedIn</a>
+		</div>
+	</div>
+</footer>

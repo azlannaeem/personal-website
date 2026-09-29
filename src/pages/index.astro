@@ -1,17 +1,108 @@
 ---
+import ImmersiveLayout from "../layouts/ImmersiveLayout.astro";
+import Timeline from "../components/Timeline.astro";
+import SkillsMarquee from "../components/SkillsMarquee.astro";
+import ProjectShowcase from "../components/ProjectShowcase.astro";
+import InterestsSection from "../components/InterestsSection.astro";
+import { profile, skills, experience } from "../data/resume";
+import { interests } from "../data/interests";
+import { getCollection } from "astro:content";
 
+const allProjects = await getCollection("projects");
+const featured = allProjects
+	.filter((p) => p.data.featured)
+	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+	.slice(0, 3)
+	.map((p) => ({
+		slug: p.id,
+		title: p.data.title,
+		description: p.data.description,
+		stack: p.data.stack,
+	}));
+
+const flatSkills = skills.flatMap((g) => g.items);
+
+const sections = [
+	{ id: "s-home", label: "Home" },
+	{ id: "s-skills", label: "Skills" },
+	{ id: "s-work", label: "Work" },
+	{ id: "s-timeline", label: "Timeline" },
+	{ id: "s-interests", label: "Interests" },
+	{ id: "s-contact", label: "Contact" },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<ImmersiveLayout sections={sections}>
+	<!-- HERO -->
+	<section id="s-home" class="page-section flex items-center justify-center px-6">
+		<div class="reveal relative z-10 mx-auto max-w-3xl text-center">
+			<p class="font-display text-xs uppercase tracking-[0.4em] text-accent">{profile.title}</p>
+			<h1 class="mt-5 font-display text-6xl font-bold tracking-tight sm:text-7xl">
+				Azlan <span class="text-transparent [-webkit-text-stroke:1px_var(--color-accent)]">Naeem</span>
+			</h1>
+			<p class="mx-auto mt-6 max-w-xl text-white/60">{profile.summary}</p>
+			<div class="mt-9 flex justify-center gap-4">
+				<a data-target="s-work" class="glow-border rounded-full border border-accent/50 px-6 py-3 text-sm font-medium text-accent transition hover:bg-accent/10">See my work</a>
+				<a href="/resume" class="rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white/80 transition hover:border-white/40">Resume ↓</a>
+			</div>
+		</div>
+		<div class="scroll-cue absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-xs uppercase tracking-widest text-white/40">scroll</div>
+	</section>
+
+	<!-- SKILLS -->
+	<section id="s-skills" class="page-section flex flex-col items-center justify-center overflow-hidden px-6 py-24">
+		<div class="reveal mb-14 text-center">
+			<p class="font-display text-xs uppercase tracking-[0.4em] text-accent">Toolkit</p>
+			<h2 class="mt-3 font-display text-4xl font-bold">What I build with</h2>
+		</div>
+		<div class="reveal w-full">
+			<SkillsMarquee items={flatSkills} />
+		</div>
+	</section>
+
+	<!-- WORK -->
+	<section id="s-work" class="page-section flex flex-col items-center justify-center px-6 py-24">
+		<div class="reveal mb-12 text-center">
+			<p class="font-display text-xs uppercase tracking-[0.4em] text-accent">Selected Work</p>
+			<h2 class="mt-3 font-display text-4xl font-bold">Projects</h2>
+		</div>
+		<div class="reveal w-full flex justify-center">
+			<ProjectShowcase projects={featured} />
+		</div>
+	</section>
+
+	<!-- TIMELINE -->
+	<section id="s-timeline" class="page-section flex flex-col items-center justify-center px-6 py-24">
+		<div class="reveal mb-16 text-center">
+			<p class="font-display text-xs uppercase tracking-[0.4em] text-accent">Path so far</p>
+			<h2 class="mt-3 font-display text-4xl font-bold">Timeline</h2>
+		</div>
+		<div class="reveal w-full flex justify-center">
+			<Timeline items={experience} />
+		</div>
+	</section>
+
+	<!-- INTERESTS -->
+	<section id="s-interests" class="page-section flex flex-col items-center justify-center px-6 py-24 text-center">
+		<div class="reveal">
+			<p class="font-display text-xs uppercase tracking-[0.4em] text-accent">Off the clock</p>
+			<h2 class="mt-3 font-display text-4xl font-bold">Interests</h2>
+			<InterestsSection items={interests} />
+		</div>
+	</section>
+
+	<!-- CONTACT -->
+	<section id="s-contact" class="page-section flex flex-col items-center justify-center px-6 py-24 text-center">
+		<div class="reveal">
+			<p class="font-display text-xs uppercase tracking-[0.4em] text-accent">Let's talk</p>
+			<h2 class="mt-3 font-display text-5xl font-bold">Get in touch</h2>
+			<p class="mx-auto mt-4 max-w-md text-white/60">Open to software engineering and applied ML roles.</p>
+			<div class="mt-8 flex flex-wrap justify-center gap-4">
+				<a href={`mailto:${profile.email}`} class="glow-border rounded-full border border-accent/50 px-6 py-3 text-sm font-medium text-accent hover:bg-accent/10">Email me</a>
+				<a href={profile.links.github} class="rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white/80 hover:border-white/40">GitHub</a>
+				<a href={profile.links.linkedin} class="rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-white/80 hover:border-white/40">LinkedIn</a>
+			</div>
+			<p class="mt-14 text-xs text-white/30">© {new Date().getFullYear()} {profile.name}</p>
+		</div>
+	</section>
+</ImmersiveLayout>

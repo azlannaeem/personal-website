@@ -1,0 +1,32 @@
+---
+import "../styles/global.css";
+import BackgroundFX from "../components/BackgroundFX.astro";
+import TopBar from "../components/TopBar.astro";
+import SideNav from "../components/SideNav.astro";
+import ScrollExperience from "../components/ScrollExperience.astro";
+import { profile } from "../data/resume";
+
+interface Props {
+	sections: { id: string; label: string }[];
+}
+
+const { sections } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={profile.summary} />
+		<title>{profile.name} · {profile.title}</title>
+	</head>
+	<body class="font-sans text-neutral-100 antialiased">
+		<BackgroundFX variant="full" />
+		<TopBar />
+		<SideNav sections={sections} />
+		<slot />
+		<ScrollExperience />
+	</body>
+</html>

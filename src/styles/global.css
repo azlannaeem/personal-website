@@ -1,0 +1,241 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap");
+@import "tailwindcss";
+
+@theme {
+	--color-accent: #22d3ee;
+	--color-accent2: #a78bfa;
+	--font-display: "Space Grotesk", sans-serif;
+	--font-sans: "Inter", sans-serif;
+}
+
+html,
+body {
+	background: #050507;
+}
+
+/* ---------- background effects (BackgroundFX component) ---------- */
+
+#bg-grid {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	background: #050507;
+	background-image:
+		linear-gradient(to right, rgb(from var(--color-accent) r g b / 0.14) 1px, transparent 1px),
+		linear-gradient(to bottom, rgb(from var(--color-accent) r g b / 0.14) 1px, transparent 1px);
+	background-size: 56px 56px;
+	animation: gridPan 18s linear infinite;
+}
+#bg-grid::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(120% 70% at 50% 0%, transparent 40%, rgba(5, 5, 7, 0.75) 100%);
+}
+@keyframes gridPan {
+	from { background-position: 0 0; }
+	to { background-position: 56px 56px; }
+}
+
+#particles {
+	position: fixed;
+	inset: 0;
+	z-index: 1;
+}
+
+.orb {
+	position: fixed;
+	z-index: 1;
+	border-radius: 9999px;
+	filter: blur(70px);
+	pointer-events: none;
+	opacity: 0.35;
+}
+.orb-a {
+	width: 30rem;
+	height: 30rem;
+	top: -8rem;
+	left: -6rem;
+	background: rgb(from var(--color-accent) r g b / 0.55);
+	animation: floatA 16s ease-in-out infinite;
+}
+.orb-b {
+	width: 24rem;
+	height: 24rem;
+	bottom: -6rem;
+	right: -4rem;
+	background: rgb(from var(--color-accent) r g b / 0.4);
+	animation: floatB 20s ease-in-out infinite;
+}
+@keyframes floatA {
+	0%, 100% { transform: translate(0, 0); }
+	50% { transform: translate(60px, 80px); }
+}
+@keyframes floatB {
+	0%, 100% { transform: translate(0, 0); }
+	50% { transform: translate(-50px, -60px); }
+}
+
+.scan-beam {
+	position: fixed;
+	left: 0;
+	right: 0;
+	height: 140px;
+	z-index: 2;
+	pointer-events: none;
+	background: linear-gradient(to bottom, transparent, rgb(from var(--color-accent) r g b / 0.10), transparent);
+	animation: scanSweep 7s ease-in-out infinite;
+}
+@keyframes scanSweep {
+	0% { top: -140px; }
+	50% { top: 100vh; }
+	100% { top: -140px; }
+}
+
+.hud-corner {
+	position: fixed;
+	z-index: 3;
+	width: 22px;
+	height: 22px;
+	border-color: rgb(from var(--color-accent) r g b / 0.5);
+	pointer-events: none;
+}
+.hud-tl { top: 14px; left: 14px; border-top: 2px solid; border-left: 2px solid; }
+.hud-tr { top: 14px; right: 14px; border-top: 2px solid; border-right: 2px solid; }
+.hud-bl { bottom: 14px; left: 14px; border-bottom: 2px solid; border-left: 2px solid; }
+.hud-br { bottom: 14px; right: 14px; border-bottom: 2px solid; border-right: 2px solid; }
+
+.status-pill { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 40; }
+.status-dot {
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-radius: 9999px;
+	background: var(--color-accent);
+	box-shadow: 0 0 8px 2px rgb(from var(--color-accent) r g b / 0.8);
+	animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.35; }
+}
+
+.page-section {
+	position: relative;
+	z-index: 10;
+	min-height: 100vh;
+}
+
+#spotlight {
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: 5;
+	background: radial-gradient(500px circle at var(--x, 50%) var(--y, 50%), rgb(from var(--color-accent) r g b / 0.10), transparent 65%);
+}
+
+/* ---------- shared UI ---------- */
+
+.glass {
+	background: rgba(255, 255, 255, 0.045);
+	backdrop-filter: blur(14px);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.navdot { transition: all 0.25s ease; }
+.navdot.active {
+	background: var(--color-accent);
+	box-shadow: 0 0 12px 2px rgb(from var(--color-accent) r g b / 0.7);
+	transform: scale(1.4);
+}
+
+.tilt { transform-style: preserve-3d; transition: transform 0.15s ease, box-shadow 0.3s ease; }
+.tilt:hover { box-shadow: 0 25px 60px -20px rgb(from var(--color-accent) r g b / 0.35); }
+
+.glow-border { position: relative; }
+.glow-border::before {
+	content: "";
+	position: absolute;
+	inset: -1px;
+	border-radius: inherit;
+	padding: 1px;
+	background: linear-gradient(135deg, rgb(from var(--color-accent) r g b / 0.6), rgb(from var(--color-accent2) r g b / 0.6), transparent 60%);
+	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+}
+.glow-border:hover::before { opacity: 1; }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+.marquee-track { display: flex; gap: 2.5rem; animation: marquee 22s linear infinite; width: max-content; }
+@keyframes marquee {
+	from { transform: translateX(0); }
+	to { transform: translateX(-50%); }
+}
+
+.scroll-cue { animation: bounce 2s ease-in-out infinite; }
+@keyframes bounce {
+	0%, 100% { transform: translateY(0); opacity: 0.5; }
+	50% { transform: translateY(8px); opacity: 1; }
+}
+
+.tl-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.tl-row:hover .tl-card {
+	transform: scale(1.06);
+	box-shadow: 0 20px 50px -18px rgb(from var(--color-accent) r g b / 0.4);
+}
+.tl-dot { transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease; }
+.tl-row:hover .tl-dot {
+	transform: translate(-50%, 0) scale(1.6);
+	background: var(--color-accent);
+	box-shadow: 0 0 16px 3px rgb(from var(--color-accent) r g b / 0.65);
+}
+
+.link-underline { position: relative; }
+.link-underline::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -2px;
+	width: 0;
+	height: 1px;
+	background: var(--color-accent);
+	transition: width 0.25s ease;
+}
+.link-underline:hover::after { width: 100%; }
+
+.project-card {
+	transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.project-card:hover {
+	box-shadow: 0 10px 40px -12px rgb(from var(--color-accent) r g b / 0.25);
+}
+
+/* Calm background variant used on content pages (/projects, /resume) — grid only, no motion. */
+#bg-grid.calm {
+	animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#bg-grid,
+	.orb,
+	.scan-beam,
+	.status-dot,
+	.marquee-track,
+	.scroll-cue {
+		animation: none !important;
+	}
+	.reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+	.tilt:hover,
+	.tl-row:hover .tl-card {
+		transform: none;
+	}
+}
